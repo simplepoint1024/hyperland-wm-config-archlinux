@@ -7,12 +7,18 @@
   "margin-right": 8,
   "spacing": 5,
   "modules-left": ["custom/launcher", "hyprland/workspaces", "hyprland/window"],
-  "modules-center": [],
+  "modules-center": ["custom/copilot-terminal"],
   "modules-right": ["cpu", "memory", "network", "backlight", "pulseaudio", "battery", "tray", "clock", "custom/power"],
   "custom/launcher": {
     "format": "☰",
     "on-click": "__HOME__/.local/bin/hypr-app-launcher",
     "tooltip": false
+  },
+  "custom/copilot-terminal": {
+    "format": "GitHub Copilot",
+    "on-click": "__HOME__/.local/bin/hypr-copilot-terminal",
+    "tooltip": true,
+    "tooltip-format": "打开 GitHub Copilot 终端"
   },
   "hyprland/workspaces": {
     "disable-scroll": false,

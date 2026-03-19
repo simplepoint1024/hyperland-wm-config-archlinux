@@ -18,6 +18,7 @@ window#waybar > box,
     background: transparent;
 }
 #custom-launcher,
+#custom-copilot-terminal,
 #workspaces,
 #window,
 #tray,
@@ -40,6 +41,16 @@ window#waybar > box,
     font-weight: 700;
     padding-left: 10px;
     padding-right: 10px;
+}
+#custom-copilot-terminal {
+    color: #1d4ed8;
+    font-weight: 700;
+    min-width: 0;
+    padding: 0 12px;
+}
+#custom-copilot-terminal:hover {
+    background: rgba(255, 255, 255, 0.42);
+    color: #1e40af;
 }
 #workspaces {
     padding: 0 4px;

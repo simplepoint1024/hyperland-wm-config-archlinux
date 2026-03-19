@@ -13,8 +13,8 @@ window {
 #outer-box {
   margin: 0;
   padding: 14px;
-  background: rgba(255, 255, 255, 0.20);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 16px;
   background-clip: padding-box;
 }
@@ -23,7 +23,7 @@ window {
   padding: 12px 16px;
   border: none;
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.88);
   color: #0f172a;
   caret-color: #0f172a;
 }
@@ -45,7 +45,7 @@ window {
   margin-right: 12px;
 }
 #entry:selected {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(241, 245, 249, 0.92);
   color: #020617;
 }
 #entry:selected image {

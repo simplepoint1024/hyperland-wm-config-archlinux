@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COPILOT_TITLE="GitHub Copilot"
+COPILOT_CONFIG="__HOME__/.config/tilda/config_copilot"
+
+spawn_detached() {
+  setsid -f "$@" >/dev/null 2>&1 || "$@" >/dev/null 2>&1 &
+}
+
+find_copilot_window() {
+  python - <<'PY'
+import json, subprocess
+title = 'GitHub Copilot'
+try:
+    raw = subprocess.check_output(['hyprctl', 'clients', '-j'], text=True)
+    data = json.loads(raw)
+except Exception:
+    raise SystemExit(1)
+for client in data:
+    if (client.get('class') or '') == 'Tilda' and (client.get('title') or '') == title:
+        print(client.get('address') or '')
+        raise SystemExit(0)
+raise SystemExit(1)
+PY
+}
+
+focus_existing() {
+  local addr=""
+  addr="$(find_copilot_window 2>/dev/null || true)"
+  if [ -n "$addr" ] && command -v hyprctl >/dev/null 2>&1; then
+    hyprctl dispatch focuswindow "address:$addr" >/dev/null 2>&1 || true
+    return 0
+  fi
+  return 1
+}
+
+launch_copilot_tilda() {
+  if ! command -v tilda >/dev/null 2>&1; then
+    return 1
+  fi
+  if [ ! -f "$COPILOT_CONFIG" ]; then
+    echo "Missing Tilda Copilot config: $COPILOT_CONFIG" >&2
+    return 1
+  fi
+  spawn_detached tilda -g "$COPILOT_CONFIG"
+  for _ in 1 2 3 4 5 6 7 8 9 10; do
+    sleep 0.3
+    if focus_existing; then
+      return 0
+    fi
+  done
+  return 0
+}
+
+fallback="__HOME__/.local/bin/hypr-terminal"
+
+if [ "${1-}" = "--print" ]; then
+  echo "focus GitHub Copilot Tilda if present, else launch tilda -g $COPILOT_CONFIG (which auto-runs copilot)"
+  exit 0
+fi
+
+if focus_existing; then
+  exit 0
+fi
+
+if launch_copilot_tilda; then
+  exit 0
+fi
+
+if [ -x "$fallback" ]; then
+  spawn_detached "$fallback"
+  exit 0
+fi
+
+echo 'No supported terminal launcher found. Install tilda or keep ~/.local/bin/hypr-terminal available.' >&2
+exit 1
+
