@@ -12,6 +12,7 @@ Personal Hyprland desktop setup for Arch Linux, including:
 - `templates/.config/...` — config files installed into `~/.config`
 - `templates/.local/bin/...` — helper scripts installed into `~/.local/bin`
 - `scripts/login-manager/...` — greetd / SDDM switch and rollback helpers
+- `scripts/login-manager/templates/...` — repository-managed greetd template files
 - `packages/arch.txt` — package list for Arch Linux
 - `install.sh` — one-click installer
 ## Quick install
@@ -26,6 +27,7 @@ chmod +x install.sh
 ./install.sh --dry-run
 ./install.sh --skip-packages
 ./install.sh --force
+./install.sh --enable-greetd
 ```
 ## What the installer does
 - installs Arch packages from `packages/arch.txt` unless `--skip-packages` is used
@@ -34,6 +36,8 @@ chmod +x install.sh
 - installs configs into `~/.config/...`
 - installs helper scripts into `~/.local/bin/...`
 - makes installed scripts executable
+- optionally deploys `scripts/login-manager/templates/greetd/config.toml.tmpl` into `/etc/greetd/config.toml`
+- optionally enables `greetd.service` and disables `sddm.service`
 ## Login manager
 This repo now tracks the recommended Hyprland login-manager path on Arch:
 - `greetd`
@@ -44,6 +48,14 @@ The switch / purge / rollback helpers live under `scripts/login-manager/`:
 - `switch-to-greetd.sh`
 - `purge-sddm.sh`
 - `rollback-to-sddm.sh`
+
+The repository-managed greetd template lives at:
+- `scripts/login-manager/templates/greetd/config.toml.tmpl`
+
+One-shot setup from the repo root:
+```bash
+./install.sh --enable-greetd
+```
 
 Detailed notes and example commands are in `docs/login-manager.md`.
 ## Notes

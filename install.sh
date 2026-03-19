@@ -11,6 +11,7 @@ BACKUP_DIR="$BACKUP_ROOT/$TIMESTAMP"
 DRY_RUN=0
 FORCE=0
 SKIP_PACKAGES=0
+ENABLE_GREETD=0
 log() { printf '[install] %s\n' "$*"; }
 warn() { printf '[install][warn] %s\n' "$*" >&2; }
 run() {
@@ -26,6 +27,7 @@ Usage: ./install.sh [options]
 Options:
   --dry-run        Show what would happen without changing files
   --force          Overwrite targets even if they already exist
+  --enable-greetd  Deploy the repo-managed greetd config and enable greetd
   --skip-packages  Do not install packages
   -h, --help       Show this help
 USAGE
@@ -34,6 +36,7 @@ while [ "$#" -gt 0 ]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
     --force) FORCE=1 ;;
+    --enable-greetd) ENABLE_GREETD=1 ;;
     --skip-packages) SKIP_PACKAGES=1 ;;
     -h) usage; exit 0 ;;
     --help) usage; exit 0 ;;
@@ -121,6 +124,26 @@ install_packages() {
     sudo pacman -S --needed "${pkgs[@]}"
   fi
 }
+run_login_manager_setup() {
+  local script="$REPO_ROOT/scripts/login-manager/switch-to-greetd.sh"
+  if [ "$ENABLE_GREETD" -ne 1 ]; then
+    return 0
+  fi
+  if [ ! -x "$script" ]; then
+    echo "Missing login-manager script: $script" >&2
+    exit 1
+  fi
+  log 'configuring greetd via repository-managed template'
+  if [ "$DRY_RUN" -eq 1 ]; then
+    "$script" --dry-run --skip-packages
+    return 0
+  fi
+  if [ "$EUID" -eq 0 ]; then
+    "$script" --skip-packages
+  else
+    sudo "$script" --skip-packages
+  fi
+}
 main() {
   log "repo: $REPO_ROOT"
   log "target home: $TARGET_HOME"
@@ -129,6 +152,7 @@ main() {
   while IFS= read -r -d '' file; do
     install_one "$file"
   done < <(find "$TEMPLATES_DIR" -type f -print0)
+  run_login_manager_setup
   log 'done'
   log "backup directory: $BACKUP_DIR"
   warn 'If wallpapers or monitor names differ on the target machine, edit ~/.config/hypr/*.conf after install.'
