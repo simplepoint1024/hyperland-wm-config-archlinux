@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+print_only=0
+if [ "${1-}" = "--print" ]; then
+  print_only=1
+fi
+
+start_if_missing() {
+  local bin="$1"
+  shift || true
+
+  if ! command -v "$bin" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if pgrep -xu "$USER" -x "$(basename "$bin")" >/dev/null 2>&1; then
+    return 0
+  fi
+
+  if [ "$print_only" -eq 1 ]; then
+    printf "%s" "$bin"
+    if [ "$#" -gt 0 ]; then
+      printf " %s" "$@"
+    fi
+    printf "\n"
+  else
+    "$bin" "$@" >/dev/null 2>&1 & disown || true
+  fi
+}
+
+if [ "$print_only" -eq 0 ]; then
+  dbus-update-activation-environment --systemd --all >/dev/null 2>&1 || true
+  systemctl --user import-environment WAYLAND_DISPLAY XDG_CURRENT_DESKTOP QT_IM_MODULE GTK_IM_MODULE XMODIFIERS SDL_IM_MODULE INPUT_METHOD >/dev/null 2>&1 || true
+fi
+
+set_laptop_backlight() {
+  if ! command -v brightnessctl >/dev/null 2>&1; then
+    return 0
+  fi
+  if [ "$print_only" -eq 1 ]; then
+    echo "brightnessctl set 65%"
+  else
+    brightnessctl set 65% >/dev/null 2>&1 || true
+  fi
+}
+set_ddc_brightness() {
+  local connector="$1"
+  local value="$2"
+  local bus=""
+  if ! command -v ddcutil >/dev/null 2>&1; then
+    return 0
+  fi
+  bus="$(ddcutil detect 2>/dev/null | awk -v connector="$connector" '
+    /I2C bus:/ { bus=$NF; sub(".*/i2c-", "", bus) }
+    /DRM_connector:/ && $NF ~ connector"$" { print bus; exit }
+  ')"
+  if [ -z "$bus" ]; then
+    return 0
+  fi
+  if [ "$print_only" -eq 1 ]; then
+    echo "ddcutil setvcp 10 $value --bus=$bus"
+  else
+    ddcutil setvcp 10 "$value" --bus="$bus" >/dev/null 2>&1 || true
+  fi
+}
+
+set_wallpaper() {
+  local wallpaper="__HOME__/Pictures/Background/kame-house-dragon-5120x2880-25003.jpg"
+
+  if [ ! -r "$wallpaper" ]; then
+    start_if_missing hyprpaper
+    return 0
+  fi
+
+  if command -v swww-daemon >/dev/null 2>&1 && command -v swww >/dev/null 2>&1; then
+    if [ "$print_only" -eq 1 ]; then
+      echo swww-daemon
+      echo "swww img $wallpaper --transition-type none"
+    else
+      if ! pgrep -xu "$USER" -x swww-daemon >/dev/null 2>&1; then
+        swww-daemon >/dev/null 2>&1 & disown || true
+        sleep 1
+      fi
+      swww img "$wallpaper" --transition-type none >/dev/null 2>&1 || true
+      killall hyprpaper >/dev/null 2>&1 || true
+    fi
+    return 0
+  fi
+
+  start_if_missing hyprpaper
+}
+
+if [ -x /usr/lib/polkit-kde-authentication-agent-1 ] && ! pgrep -f polkit-kde-authentication-agent-1 >/dev/null 2>&1; then
+  if [ "$print_only" -eq 1 ]; then
+    echo /usr/lib/polkit-kde-authentication-agent-1
+  else
+    /usr/lib/polkit-kde-authentication-agent-1 >/dev/null 2>&1 & disown || true
+  fi
+fi
+
+set_laptop_backlight
+set_ddc_brightness "HDMI-A-3" 70
+
+start_if_missing fcitx5
+start_if_missing waybar
+start_if_missing mako
+start_if_missing nm-applet --indicator
+start_if_missing blueman-applet
+set_wallpaper
+start_if_missing hypridle

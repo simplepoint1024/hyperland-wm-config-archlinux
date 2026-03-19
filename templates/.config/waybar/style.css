@@ -1,0 +1,155 @@
+* {
+    border: none;
+    border-radius: 12px;
+    font-family: "Noto Sans", "Noto Color Emoji", Sans;
+    font-size: 11px;
+    min-height: 0;
+    box-shadow: none;
+    text-shadow: none;
+}
+window#waybar {
+    background: transparent;
+    color: #1f2937;
+}
+window#waybar > box,
+.modules-left,
+.modules-center,
+.modules-right {
+    background: transparent;
+}
+#custom-launcher,
+#workspaces,
+#window,
+#tray,
+#battery,
+#backlight,
+#network,
+#pulseaudio,
+#cpu,
+#memory,
+#clock,
+#custom-power {
+    background: rgba(255, 255, 255, 0.30);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #1f2937;
+    padding: 0 9px;
+    margin: 0 1px;
+}
+#custom-launcher {
+    color: #2563eb;
+    font-weight: 700;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+#workspaces {
+    padding: 0 4px;
+}
+#workspaces button {
+    padding: 0 7px;
+    margin: 2px 1px;
+    border-radius: 11px;
+    color: #334155;
+    background: transparent;
+}
+#workspaces button:hover {
+    background: rgba(255, 255, 255, 0.22);
+    color: #1f2937;
+}
+#workspaces button.active {
+    background: rgba(255, 255, 255, 0.36);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    color: #1e3a8a;
+}
+#workspaces button.urgent {
+    background: rgba(255, 228, 228, 0.34);
+    color: #b45309;
+}
+#window {
+    color: #334155;
+}
+#battery {
+    color: #166534;
+    font-weight: 600;
+}
+#battery.warning {
+    color: #92400e;
+    font-weight: 600;
+}
+#battery.critical {
+    color: #b91c1c;
+    font-weight: 600;
+}
+#battery.charging,
+#battery.plugged {
+    color: #075985;
+    font-weight: 600;
+}
+#backlight {
+    color: #92400e;
+}
+#network {
+    color: #115e59;
+}
+#pulseaudio {
+    color: #1d4ed8;
+}
+#cpu,
+#memory {
+    color: #5b21b6;
+}
+#clock {
+    color: #3730a3;
+    font-weight: 700;
+}
+#custom-power {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 18px;
+    padding: 0 12px;
+}
+#custom-power:hover {
+    background: rgba(255, 255, 255, 0.42);
+    color: #1d4ed8;
+}
+tooltip {
+    background: rgba(255, 255, 255, 0.70);
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    color: #111827;
+    box-shadow: none;
+    background-clip: padding-box;
+}
+tooltip label {
+    color: #111827;
+}
+menu {
+    background: rgba(255, 255, 255, 0.64);
+    border: none;
+    outline: none;
+    border-radius: 16px;
+    color: #111827;
+    padding: 8px;
+    box-shadow: none;
+    background-clip: padding-box;
+}
+menuitem {
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    color: #111827;
+    padding: 6px 12px;
+    margin: 2px 0;
+    box-shadow: none;
+    background: transparent;
+}
+menuitem:hover {
+    background: rgba(255, 255, 255, 0.42);
+    color: #1e3a8a;
+}
+menu separator {
+    background: rgba(148, 163, 184, 0.18);
+    margin: 4px 6px;
+    min-height: 1px;
+}

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+pkgs=(
+  waybar
+  mako
+  hyprpaper
+  hyprlock
+  hypridle
+  wofi
+  grim
+  slurp
+  wl-clipboard
+  cliphist
+  playerctl
+  pavucontrol
+  network-manager-applet
+  blueman
+  brightnessctl
+  xdg-desktop-portal-hyprland
+)
+exec sudo pacman -S --needed "${pkgs[@]}"

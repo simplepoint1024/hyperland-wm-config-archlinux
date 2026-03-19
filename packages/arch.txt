@@ -1,0 +1,30 @@
+# Core Hyprland desktop
+hyprland
+waybar
+mako
+hyprpaper
+hyprlock
+hypridle
+xdg-desktop-portal-hyprland
+# Launcher, terminal, tray helpers
+wofi
+tilda
+network-manager-applet
+blueman
+polkit-kde-agent
+# Screenshots, clipboard, media, brightness
+grim
+slurp
+wl-clipboard
+cliphist
+playerctl
+brightnessctl
+ddcutil
+pavucontrol
+# Input method and wallpaper helpers
+fcitx5
+fcitx5-gtk
+fcitx5-qt
+swww
+# Optional file manager used by the helper script
+dolphin

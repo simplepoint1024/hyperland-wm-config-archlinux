@@ -1,0 +1,5 @@
+.install-state/
+*.bak
+*.tmp
+*.orig
+*.rej

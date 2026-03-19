@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if command -v wofi >/dev/null 2>&1; then
+  [ "${1-}" = "--print" ] && echo 'wofi --show drun --allow-images --prompt Apps' && exit 0
+  exec wofi --show drun --allow-images --prompt Apps
+fi
+if command -v rofi >/dev/null 2>&1; then
+  [ "${1-}" = "--print" ] && echo 'rofi -show drun' && exit 0
+  exec rofi -show drun
+fi
+if command -v dolphin >/dev/null 2>&1; then
+  [ "${1-}" = "--print" ] && echo 'dolphin' && exit 0
+  exec dolphin
+fi
+echo 'No app launcher found. Install wofi or rofi-wayland.' >&2
+exit 1

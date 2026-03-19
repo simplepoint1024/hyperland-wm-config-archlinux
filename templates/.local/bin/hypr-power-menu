@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+show_menu() {
+  cat <<'MENU'
+🔒 锁屏
+🌙 休眠
+↩ 注销
+🔄 重启
+⏻ 关机
+MENU
+}
+run_action() {
+  case "$1" in
+    *锁屏)
+      exec __HOME__/.local/bin/hypr-lock
+      ;;
+    *休眠)
+      exec systemctl suspend
+      ;;
+    *注销)
+      exec hyprctl dispatch exit
+      ;;
+    *重启)
+      exec systemctl reboot
+      ;;
+    *关机)
+      exec systemctl poweroff
+      ;;
+    "")
+      exit 0
+      ;;
+    *)
+      printf 'Unknown action: %s\n' "$1" >&2
+      exit 1
+      ;;
+  esac
+}
+if [[ "${1-}" == "--print-options" ]]; then
+  show_menu
+  exit 0
+fi
+if [[ "${1-}" == "--run" ]]; then
+  run_action "${2-}"
+fi
+if command -v wofi >/dev/null 2>&1; then
+  choice="$(wofi --dmenu --prompt '电源' --width 260 --lines 5 --hide-scroll --insensitive --cache-file /dev/null --style __HOME__/.config/wofi/power-menu.css < <(show_menu))"
+  run_action "$choice"
+fi
+printf 'No supported launcher available for power menu.\n' >&2
+exit 1

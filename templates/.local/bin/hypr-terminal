@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+for cmd in alacritty kitty foot wezterm konsole; do
+  if command -v "$cmd" >/dev/null 2>&1; then
+    if [ "${1-}" = "--print" ]; then
+      echo "$cmd"
+    else
+      exec "$cmd"
+    fi
+    exit 0
+  fi
+done
+echo 'No terminal found. Install alacritty/kitty/foot or keep konsole available.' >&2
+exit 1

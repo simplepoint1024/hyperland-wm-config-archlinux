@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+mode="${1:-area}"
+out_dir="$HOME/Pictures/Screenshots"
+mkdir -p "$out_dir"
+file="$out_dir/$(date +'%Y-%m-%d_%H-%M-%S').png"
+
+if [ "${1-}" = "--check" ]; then
+  for cmd in grim slurp wl-copy; do
+    if command -v "$cmd" >/dev/null 2>&1; then
+      echo "$cmd: yes"
+    else
+      echo "$cmd: no"
+    fi
+  done
+  exit 0
+fi
+
+if ! command -v grim >/dev/null 2>&1; then
+  echo "grim is not installed." >&2
+  exit 1
+fi
+
+save_and_copy() {
+  local src_cmd="$1"
+  if command -v wl-copy >/dev/null 2>&1; then
+    eval "$src_cmd" | tee "$file" | wl-copy
+  else
+    eval "$src_cmd" > "$file"
+  fi
+}
+
+if [ "$mode" = "full" ]; then
+  save_and_copy "grim -"
+else
+  if ! command -v slurp >/dev/null 2>&1; then
+    echo "slurp is not installed." >&2
+    exit 1
+  fi
+  region="$(slurp)"
+  save_and_copy "grim -g '$region' -"
+fi
+
+if command -v hyprctl >/dev/null 2>&1; then
+  hyprctl notify -1 3000 "rgb(88cc88)" "截图已保存: $file" >/dev/null 2>&1 || true
+fi
+
+printf "%s\n" "$file"

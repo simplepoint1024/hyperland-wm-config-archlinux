@@ -1,0 +1,11 @@
+width=720
+height=560
+location=center
+show=drun
+prompt=Apps
+insensitive=true
+hide_scroll=true
+normal_window=false
+allow_images=true
+image_size=28
+term=tilda

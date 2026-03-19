@@ -1,0 +1,93 @@
+{
+  "layer": "top",
+  "position": "top",
+  "height": 26,
+  "margin-top": 3,
+  "margin-left": 8,
+  "margin-right": 8,
+  "spacing": 5,
+  "modules-left": ["custom/launcher", "hyprland/workspaces", "hyprland/window"],
+  "modules-center": [],
+  "modules-right": ["cpu", "memory", "network", "backlight", "pulseaudio", "battery", "tray", "clock", "custom/power"],
+  "custom/launcher": {
+    "format": "☰",
+    "on-click": "__HOME__/.local/bin/hypr-app-launcher",
+    "tooltip": false
+  },
+  "hyprland/workspaces": {
+    "disable-scroll": false,
+    "sort-by-number": true,
+    "format": "{id}",
+    "on-click": "activate"
+  },
+  "hyprland/window": {
+    "format": "{title}",
+    "separate-outputs": true,
+    "max-length": 80,
+    "rewrite": {
+      "": "桌面"
+    }
+  },
+  "tray": {
+    "icon-size": 14,
+    "spacing": 6
+  },
+  "battery": {
+    "battery": "BAT0",
+    "adapter": "ADP0",
+    "interval": 10,
+    "states": {
+      "warning": 30,
+      "critical": 15
+    },
+    "format": "🔋 {capacity}%",
+    "format-charging": "⚡ {capacity}%",
+    "format-plugged": "🔌 {capacity}%",
+    "format-full": "🔋 {capacity}%",
+    "format-alt": "{time}",
+    "tooltip-format": "{capacity}%"
+  },
+  "backlight": {
+    "device": "nvidia_0",
+    "format": "☀ {percent}%",
+    "tooltip-format": "亮度 {percent}%",
+    "on-scroll-up": "brightnessctl set +5%",
+    "on-scroll-down": "brightnessctl set 5%-"
+  },
+  "network": {
+    "interval": 5,
+    "format-wifi": "📶 {signalStrength}%",
+    "format-ethernet": "🖧 {ipaddr}",
+    "format-linked": "🖧 {ifname}",
+    "format-disconnected": "⛔",
+    "tooltip-format-wifi": "{essid}\n{ipaddr}/{cidr}",
+    "tooltip-format-ethernet": "{ifname}\n{ipaddr}/{cidr}",
+    "tooltip-format-disconnected": "未连接"
+  },
+  "pulseaudio": {
+    "format": "🔊 {volume}%",
+    "format-muted": "🔇",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "on-click-right": "pavucontrol",
+    "scroll-step": 5
+  },
+  "cpu": {
+    "interval": 3,
+    "format": "🖥 {usage}%"
+  },
+  "memory": {
+    "interval": 5,
+    "format": "🧠 {}%"
+  },
+  "clock": {
+    "interval": 1,
+    "format": "🕒 {:%Y-%m-%d %H:%M}",
+    "tooltip-format": "<big>{:%Y 年 %m 月}</big>\n<tt>{calendar}</tt>"
+  }
+  ,"custom/power": {
+    "format": "⏻",
+    "tooltip": true,
+    "tooltip-format": "电源菜单",
+    "on-click": "__HOME__/.local/bin/hypr-power-menu"
+  }
+}
