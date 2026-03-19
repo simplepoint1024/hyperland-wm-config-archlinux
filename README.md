@@ -1,14 +1,17 @@
 # Hyprland WM Config for Arch Linux
 Personal Hyprland desktop setup for Arch Linux, including:
 - `Hyprland`
+- `uwsm`
 - `Waybar`
 - `Wofi`
 - `Tilda`
+- `greetd + tuigreet` helper scripts
 - helper scripts under `~/.local/bin`
 - `hypridle`, `hyprlock`, `hyprpaper`
 ## Repository layout
 - `templates/.config/...` — config files installed into `~/.config`
 - `templates/.local/bin/...` — helper scripts installed into `~/.local/bin`
+- `scripts/login-manager/...` — greetd / SDDM switch and rollback helpers
 - `packages/arch.txt` — package list for Arch Linux
 - `install.sh` — one-click installer
 ## Quick install
@@ -31,6 +34,18 @@ chmod +x install.sh
 - installs configs into `~/.config/...`
 - installs helper scripts into `~/.local/bin/...`
 - makes installed scripts executable
+## Login manager
+This repo now tracks the recommended Hyprland login-manager path on Arch:
+- `greetd`
+- `tuigreet`
+- `uwsm`
+
+The switch / purge / rollback helpers live under `scripts/login-manager/`:
+- `switch-to-greetd.sh`
+- `purge-sddm.sh`
+- `rollback-to-sddm.sh`
+
+Detailed notes and example commands are in `docs/login-manager.md`.
 ## Notes
 ### Wallpapers
 This repo keeps the current wallpaper paths from the original machine, but they are rewritten to your home directory at install time.

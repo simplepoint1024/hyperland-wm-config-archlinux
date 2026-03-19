@@ -1,5 +1,6 @@
 # Core Hyprland desktop
 hyprland
+uwsm
 waybar
 mako
 hyprpaper
@@ -12,6 +13,9 @@ tilda
 network-manager-applet
 blueman
 polkit-kde-agent
+# Recommended login manager stack for Hyprland
+greetd
+greetd-tuigreet
 # Screenshots, clipboard, media, brightness
 grim
 slurp
